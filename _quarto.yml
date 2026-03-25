@@ -5,10 +5,9 @@ project:
 
 book:
   title: "BMS CHO Cell Productivity Knowledge Graph"
-  subtitle: "User Manual — Version 3"
+
   author: "Elucidata × BMS"
-  date: "2026-03-16"
-  date-format: "MMMM D, YYYY"
+  
   description: |
     A comprehensive guide to querying, interpreting, and deriving actionable
     insights from the BMS CHO Cell Productivity Knowledge Graph.
@@ -65,8 +64,8 @@ format:
       - right=25mm
       - bottom=30mm
     colorlinks: true
-    linkcolor: "#6d28d9"
-    urlcolor: "#ea580c"
+    linkcolor: 'blue'
+    urlcolor: 'blue'
     toc: true
     toc-depth: 2
     number-sections: true
