@@ -1,6 +1,7 @@
 project:
   type: book
-  output-dir: _book
+  
+  output-dir: docs
 
 book:
   title: "BMS CHO Cell Productivity Knowledge Graph"
