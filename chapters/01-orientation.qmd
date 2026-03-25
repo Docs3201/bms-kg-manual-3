@@ -1,0 +1,145 @@
+---
+title: "Orientation"
+subtitle: "What the KG is, what it contains, and how to talk to it"
+---
+
+## Overview {#sec-orientation}
+
+This chapter is your starting point. Before running any query, spend a few minutes here to understand how the KG is structured—you will get significantly better results.
+
+---
+
+## What is the Knowledge Graph? {#sec-kg-intro}
+
+A **Knowledge Graph (KG)** is a structured, semantic representation of data that connects real-world entities—genes, proteins, metabolites, pathways, samples, publications—through typed relationships.
+
+The BMS CHO Productivity KG uses a **property graph** model (Neo4j) with three primitives:
+
+| Primitive | Description | Examples |
+|---|---|---|
+| **Nodes** (Entities) | Objects or concepts | Gene, Protein, Metabolite, Sample, Pathway, Factor, Cohort, Study |
+| **Edges** (Connections) | Typed relationships | `gene_expressed_in`, `upregulated`, `gene_part_of`, `tf_regulates_cohort_degs` |
+| **Properties** (Attributes) | Metadata on nodes/edges | log2FC, adj. p-value, kME, MOFA weight, Spearman r |
+
+The KG is queried through a natural-language interface that converts your question into Cypher graph queries automatically. You can also use the NLQ tips in @sec-query-tips.
+
+---
+
+## Data Model Overview
+
+The complete data model connects the following entity types:
+
+```{=html}
+<figure>
+<figcaption><strong>Figure 1.1</strong> — Simplified entity-relationship diagram of the BMS KG. Arrows represent named edge types; colors group entity categories (blue = molecular features, pink = experimental design, orange/tan = phenotypes, purple = pathway annotations).</figcaption>
+</figure>
+```
+
+Key relationships to know:
+
+- **Gene → Sample**: `gene_expressed_in` (TPM values, per sample)
+- **Gene → Cohort**: `upregulated` / `downregulated` / `non_regulated` (DESeq2 results)
+- **Gene / Protein / Metabolite → Network**: `gene_part_of` (WGCNA module membership, kME)
+- **Gene / Protein / Metabolite → Factor**: `gene_contributes_to_factor` (MOFA weights)
+- **Gene → Positive/Negative Phenotypes**: Spearman correlation with qP, titre, IVCD
+- **Gene → Cohort**: `tf_regulates_cohort_degs` (TF enrichment)
+- **Pathway → Cohort / Network / Factor**: `kegg_pathway_enriched_in` / `go_term_enriched_in`
+
+---
+
+## What Data Lives in the KG? {#sec-data-contents}
+
+### In-House BMS Data
+
+**Study 1** — multi-omics time-series (Days 3, 5, 9, 11, 14):
+
+| Molecule | Clones | High qP | Low qP | Omics |
+|---|---|---|---|---|
+| C144 | 5 | 2 | 3 | Transcriptomics, Proteomics, Metabolomics |
+| Nivo | 3 | 1 | 2 | Transcriptomics, Proteomics, Metabolomics |
+
+**Study 2** — proteomics only (Days 5, 7, 9, 11):
+
+| Molecule | Clones | High qP | Low qP |
+|---|---|---|---|
+| Milvaxin | 6 | 3 | 3 |
+| COVID2 | 6 | 3 | 3 |
+| Nivo | 3 | 1 | 2 |
+| FXIaR | 6 | 3 | 3 |
+
+Bioprocess measurements in Study 1: **qP, titre, IVCD, lactate, O₂, cell density**, and others.
+
+### Public Data
+
+- **11 transcriptomics datasets** from 10 publications (Study 1 + public), comparing high vs. low or high vs. non-producing clones
+- **3 proteomics datasets** (Studies 1 & 2 + public)
+- **1 metabolomics dataset** (Study 1)
+- **~500 publications** on genetic perturbation → productivity outcomes (45 ingested at the time of writing)
+
+### External Databases
+
+NCBI Gene, UniProt, ChEBI, KEGG (pathways, reactions, enzymes, orthologs), Gene Ontology (BP, MF, CC), PubMed, Cellosaurus.
+
+---
+
+## Cohort Naming Conventions {#sec-cohorts}
+
+The KG stores results for **883 cohorts** across four categories. When querying for DEG or enrichment results, **always name your cohort explicitly** for best retrieval.
+
+| Category | Count | Example |
+|---|---|---|
+| Productivity-Based (High vs. Low, all clones & days) | 6 | `Nivo_study1_all_high_vs_Nivo_study1_all_low` |
+| Clone-Wise (across all days) | 36 | `Nivo_clone8_study1_all_vs_Nivo_clone49_study1_all` |
+| Temporal (same clone, different days) | 190 | `Nivo_clone49_day11_study1_vs_Nivo_clone49_day8_study1` |
+| Temporal Cross-Clone | 630 | `Nivo_clone8_day11_study1_vs_Nivo_clone49_day8_study1` |
+| Public (high vs. low / non-producer) | 19 | `GSE295486_high_producer_vs_GSE295486_non_producer` |
+
+::: {.callout-tip}
+Prefer **Productivity-Based** cohorts when asking global "which genes drive high productivity?" questions. Use Clone-Wise or Temporal cohorts for clone-specific or time-resolved investigations.
+:::
+
+---
+
+## How to Phrase Natural-Language Queries {#sec-query-tips}
+
+The KG interface accepts plain English. Follow these principles for reliable results:
+
+1. **Name the entity type** — say "gene", "protein", or "metabolite", not just a symbol.
+2. **Name the cohort or condition** — include molecule (Nivo / C144) and study when relevant.
+3. **State the direction** — "upregulated in high producers", "negatively correlated with qP".
+4. **State the evidence layer** — "in WGCNA module M1", "with MOFA Factor 1 weight > 0.3".
+5. **Add thresholds explicitly** — "adj. p-value < 0.05 and |log2FC| > 2".
+
+::: {.query-box}
+Show me genes upregulated in high vs. low producers in Nivo Study 1 with adj. p-value < 0.05 and absolute log2 fold change greater than 2.
+:::
+
+::: {.query-box}
+Which proteins are positively correlated with qP (Spearman r > 0.5) in Study 1?
+:::
+
+::: {.query-box}
+What KEGG pathways are enriched in WGCNA Module M1 for the Nivo high vs. low productivity cohort?
+:::
+
+---
+
+## Understanding Query Results
+
+Results are returned as **tables**, **network views**, or **charts** depending on the query type:
+
+- **Tables** — for DEG lists, correlation rankings, module membership
+- **Network views** — for TF-gene regulatory graphs, WGCNA modules, KG subgraphs
+- **Bar / violin charts** — for pathway enrichment scores, correlation distributions
+
+Key columns you will encounter:
+
+| Column | Meaning |
+|---|---|
+| `log2FC` | Log₂ fold change (DEG); positive = higher in first group |
+| `adj_pvalue` | Benjamini-Hochberg corrected p-value |
+| `kME` | Module eigengene connectivity (WGCNA hub score; closer to 1 = stronger hub) |
+| `gs_qp` / `gs_titre` / `gs_ivcd` | Gene significance scores (WGCNA correlation with trait) |
+| `mofa_weight` | MOFA feature weight; sign indicates direction, magnitude indicates importance |
+| `spearman_r` | Spearman correlation of feature abundance with productivity phenotype |
+| `NES` | Normalised enrichment score (GSEA); positive = enriched in first group |

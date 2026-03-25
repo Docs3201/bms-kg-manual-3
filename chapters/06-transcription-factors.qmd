@@ -1,0 +1,112 @@
+---
+title: "Transcription Factor Analysis"
+subtitle: "Master regulators of high-producer gene expression programs"
+---
+
+## Overview {#sec-tf}
+
+Transcription factor (TF) enrichment analysis identifies upstream regulators whose target genes are over-represented in a DEG list or WGCNA module. This chapter covers how to find, filter, and interpret TF regulatory evidence in the KG.
+
+---
+
+## What TF Enrichment Data is Available
+
+TF enrichment is performed using **gseapy (enrich)** against curated TF–target databases. Results are stored as edges from TF gene nodes to cohort or network nodes:
+
+| Edge type | Meaning |
+|---|---|
+| `tf_regulates_cohort_degs` | TF whose targets are enriched in a specific cohort's DEG list |
+| `tf_regulates_network_genes` | TF whose targets are enriched in a WGCNA module |
+
+Key properties on TF edges: `padj` (adjusted p-value), `overlap_genes` (list of shared target genes), `n_targets` (total targets regulated).
+
+Available for: **Study 1 cohorts** and **WGCNA modules** (gene layer only).
+
+---
+
+## Querying TF Enrichment
+
+### TFs Regulating High-Producer DEGs
+
+::: {.query-box}
+Which transcription factors regulate genes upregulated in high vs. low Nivo producers in Study 1?
+:::
+
+::: {.query-box}
+Show TFs with adj. p-value < 0.01 whose targets are enriched among upregulated DEGs in C144 high producers.
+:::
+
+### TFs Linked to a Specific Module
+
+::: {.query-box}
+Which TFs regulate genes in WGCNA module M1 (pro-productivity)?
+:::
+
+::: {.query-box}
+What transcription factors control the anti-productivity gene module M18?
+:::
+
+### Tracing a Gene to Its Upstream Regulators
+
+::: {.query-box}
+What transcription factors regulate HSPA5 in the context of high-producer cohorts?
+:::
+
+::: {.query-box}
+Trace gene KCTD14 upstream to its transcription factors.
+:::
+
+---
+
+## Master Regulator Identification
+
+A **master regulator** is a TF that controls a large number of target genes across multiple modules or cohorts.
+
+::: {.query-box}
+Which transcription factors have the broadest target gene scope across all pro-productivity cohorts in Study 1?
+:::
+
+Key master regulators identified across pro-productivity (M1/M7/M8) and anti-productivity (M16/M18) modules:
+
+| TF | Module association | padj (representative) |
+|---|---|---|
+| **E2F4** | Anti-productivity (M18) | 3.7e−122 |
+| FOXM1 | Anti-productivity | Significant |
+| E2F1 | Anti-productivity | Significant |
+| MYC | Anti-productivity | Significant |
+| NFE2L2 (NRF2) | Pro-productivity (M1) | Significant |
+| FOXO1 | Pro-productivity (M1) | Significant |
+| PPARA | Pro-productivity (M1) | Significant |
+| FOXA1 | Pro-productivity (M1) | Significant |
+| SMARCA4 | Pro-productivity | Significant |
+| KLF5 | Pro-productivity | Significant |
+
+::: {.callout-note}
+**E2F4** is the most statistically significant TF in the dataset (padj = 3.7×10⁻¹²²), regulating genes in the anti-productivity cell cycle/DNA replication module M18. Targeting E2F4 or its upstream pathway could suppress cell proliferation programs and redirect resources toward productivity.
+:::
+
+---
+
+## Checking if a TF is Itself Differentially Expressed
+
+::: {.query-box}
+Is NFE2L2 (NRF2) differentially expressed in high vs. low producers in Study 1?
+:::
+
+::: {.query-box}
+Is FOXM1 a member of any WGCNA module? What is its gs_qp score?
+:::
+
+::: {.query-box}
+Does E2F4 have a significant MOFA Factor 1 weight?
+:::
+
+---
+
+## Combining TF Evidence with Other Layers
+
+For the highest-confidence regulatory targets:
+
+::: {.query-box}
+Show TFs that (1) regulate upregulated DEGs in high producers, (2) are themselves upregulated in high producers, AND (3) are members of a pro-productivity WGCNA module.
+:::

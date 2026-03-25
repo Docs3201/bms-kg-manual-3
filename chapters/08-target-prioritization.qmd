@@ -1,0 +1,127 @@
+---
+title: "Target Prioritisation"
+subtitle: "Shortlisting high-confidence genetic engineering candidates"
+---
+
+## Overview {#sec-targets}
+
+This chapter is the **deliverable section**—where multi-layer evidence converges into a ranked shortlist of overexpression (OE) and knockout (KO) candidates for experimental validation.
+
+---
+
+## What Makes a High-Confidence Candidate?
+
+The KG scores candidates across six dimensions:
+
+```{=html}
+<div class="step-box"><div class="step-number">1</div><div><strong>Direction and Strength of Association</strong> — Spearman correlation of gene/protein/metabolite abundance with qP, titre, IVCD</div></div>
+<div class="step-box"><div class="step-number">2</div><div><strong>Multi-omics Signal</strong> — Consistent DE signal at both RNA and protein level (directional concordance)</div></div>
+<div class="step-box"><div class="step-number">3</div><div><strong>Consensus Signal</strong> — Agreement across DEG, WGCNA module membership, and MOFA Factor loading</div></div>
+<div class="step-box"><div class="step-number">4</div><div><strong>Pathway / Functional Role</strong> — Target involved in productivity-relevant biology (secretory pathway, ER stress, metabolic flux)</div></div>
+<div class="step-box"><div class="step-number">5</div><div><strong>Impact on Growth and Titer</strong> — In-silico GEM perturbation predicting effects on secretion with minimal growth penalty <em>(in progress)</em></div></div>
+<div class="step-box"><div class="step-number">6</div><div><strong>Causal Mining Evidence</strong> — Publication-evidence score from curated genetic manipulation studies</div></div>
+```
+
+---
+
+## Overexpression Candidates
+
+Overexpression candidates are genes that, when expressed at higher levels, are expected to **increase** productivity.
+
+**Criteria:**
+
+- Upregulated in high producers in ≥ 7/10 cohorts
+- Positive Spearman correlation with qP (r > 0.5)
+- Positive MOFA Factor 1 weight
+- Member of pro-productivity WGCNA module (e.g., M1)
+- Published OE evidence showing positive productivity effect (where available)
+
+::: {.query-box}
+Identify overexpression candidates: genes upregulated in high producers across ≥7/10 cohorts, with positive MOFA Factor 1 weight and positive qP correlation > 0.5.
+:::
+
+::: {.query-box}
+Rank overexpression candidates by number of supporting high-producer cohorts, then by abs(log2FC).
+:::
+
+### Example: HSPA5
+
+<span class="evidence-badge badge-deg">DEG</span> <span class="evidence-badge badge-wgcna">WGCNA</span> <span class="evidence-badge badge-mofa">MOFA</span> <span class="evidence-badge badge-lit">Literature</span>
+
+| Evidence layer | Value |
+|---|---|
+| DEG consistency | Up in 7/10 cohorts |
+| Spearman qP | r = +0.52 |
+| Spearman titre | r = +0.38 |
+| MOFA Factor 1 weight | +0.392 |
+| WGCNA module | M1 (kME = 0.660); ER processing / UPR enriched |
+| TF regulators | NFE2L2 (NRF2), FOXO1, PPARA, FOXA1 |
+| Literature | PMIDs 32624757, 24081924, 1373378 — GRP78/BiP OE → ↑ titre, ↑ qP |
+| **Recommendation** | ▲ **OVEREXPRESS** |
+
+---
+
+## Knockout Candidates
+
+Knockout candidates are genes that, when eliminated, are expected to **relieve** a productivity bottleneck.
+
+**Criteria:**
+
+- Downregulated in high producers in ≥ 7/10 cohorts (or upregulated, reflecting a gene that suppresses productivity)
+- Negative Spearman correlation with qP (r < −0.5)
+- Negative MOFA Factor 1 weight
+- Member of anti-productivity WGCNA module (e.g., M18)
+- Published KO evidence showing positive productivity effect (where available)
+
+::: {.query-box}
+Identify knockout candidates: genes with negative MOFA Factor 1 weight, downregulated in ≥7/10 high-producer cohorts, and negative Spearman qP correlation.
+:::
+
+### Example: ST14
+
+<span class="evidence-badge badge-deg">DEG</span> <span class="evidence-badge badge-wgcna">WGCNA</span> <span class="evidence-badge badge-mofa">MOFA</span> <span class="evidence-badge badge-lit">Literature</span>
+
+| Evidence layer | Value |
+|---|---|
+| DEG consistency | Down in 10/10 cohorts |
+| Spearman qP | r = −0.51 |
+| Spearman titre | r = −0.51 |
+| MOFA Factor 1 weight | −0.303 (anti-productivity loading) |
+| WGCNA module | M18 (kME = 0.595); Cell cycle / DNA replication enriched |
+| TF regulators | E2F4 (padj = 3.7×10⁻¹²²), FOXM1, E2F1, MYC |
+| Literature | PMID 29777593 — ST14 KO → ↓ fragmentation, ↑ product purity |
+| **Recommendation** | ▼ **KNOCKOUT** |
+
+---
+
+## Multi-Omics Concordance Filter
+
+Apply concordance filtering to further refine candidates:
+
+::: {.query-box}
+From the 63-gene shortlist, which have concordant RNA–protein regulation (mRNA up and protein up for OE candidates, or mRNA down and protein down for KO candidates)?
+:::
+
+---
+
+## Molecule-Specific vs. Shared Targets
+
+::: {.query-box}
+Compare overexpression candidates between Nivo and C144. Which targets are shared across both molecules, and which are molecule-specific?
+:::
+
+::: {.query-box}
+Show knockout candidates that appear in both Nivo and C144 high-vs-low cohorts.
+:::
+
+Shared targets are preferred for **cell-line-wide** engineering; molecule-specific targets may be relevant for product-specific quality or expression challenges.
+
+---
+
+## Exporting the Shortlist
+
+::: {.query-box}
+Export the top 20 overexpression candidates as a ranked table with columns: gene symbol, DEG cohort count, Spearman qP, MOFA Factor 1 weight, WGCNA module, literature PMID.
+:::
+
+The exported table provides a ready-to-use input for experimental planning and prioritisation discussions.

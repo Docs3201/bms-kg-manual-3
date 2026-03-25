@@ -1,0 +1,104 @@
+---
+title: "Cross-Evidence Integration"
+subtitle: "Concordance and discordance between BMS internal data and published literature"
+---
+
+## Overview {#sec-cross-evidence}
+
+The highest-confidence engineering candidates are those supported by **both** BMS internal data and independent published literature. This chapter explains how to find, interpret, and resolve agreement—or disagreement—between these two evidence streams.
+
+---
+
+## Why Cross-Evidence Analysis Matters
+
+Internal data alone can surface many differentially expressed genes—but not all are validated targets. Literature alone reflects findings in other cell lines, products, and contexts. When both sources **agree in direction**, confidence in the target rises substantially.
+
+::: {.callout-note}
+The KG stores BMS omics results and literature cause-effect relationships as separate edge types on the same gene nodes. This allows a single query to traverse both layers simultaneously.
+:::
+
+---
+
+## Checking if a Literature Gene Appears in BMS Data
+
+::: {.query-box}
+Is HSPA5 differentially expressed in BMS Study 1 high vs. low producer cohorts?
+:::
+
+::: {.query-box}
+Is HSPA5 a member of a WGCNA module correlated with productivity in Study 1?
+:::
+
+::: {.query-box}
+Does HSPA5 have a significant MOFA Factor 1 weight in Study 1?
+:::
+
+---
+
+## Direction Concordance
+
+The most important check: does the **direction** of the BMS signal agree with the published manipulation effect?
+
+| BMS signal | Published effect | Verdict |
+|---|---|---|
+| Gene upregulated in high producers | Overexpression → ↑ qP | ✅ Concordant — strong OE candidate |
+| Gene downregulated in high producers | Knockout → ↑ titer | ✅ Concordant — strong KO candidate |
+| Gene upregulated in high producers | Overexpression → ↓ qP | ⚠️ Discordant — investigate context |
+| Gene not DE in BMS | Overexpression → ↑ qP | 🔍 BMS data silent — check other layers |
+
+::: {.query-box}
+For genes with published overexpression evidence showing positive qP effect, which are also upregulated in high producers in BMS Study 1?
+:::
+
+---
+
+## Explaining Discordance
+
+When BMS and literature disagree, common explanations include:
+
+- **Source organism**: human or mouse study; CHO physiology may differ
+- **Product type**: a gene relevant for mAb production may behave differently for fusion proteins
+- **Cell line background**: CHO-K1 vs. CHO-DG44 vs. CHO-S show regulatory differences
+- **Timepoint**: literature perturbation may have been measured at a different culture stage
+
+::: {.query-box}
+The literature shows positive productivity effect for gene X, but BMS data show it is downregulated in high producers. Are the literature studies from CHO cells or human cells?
+:::
+
+---
+
+## Finding Genes with Multi-Omics + Literature Support
+
+The most actionable candidates:
+
+::: {.query-box}
+Show genes that are (1) consistently upregulated in high producers in BMS Study 1 across ≥7 cohorts, (2) members of a pro-productivity WGCNA module, (3) have positive MOFA Factor 1 weight, AND (4) have published evidence linking them to increased qP or titer.
+:::
+
+The intersection of these criteria converges to a small, high-confidence set. For example, the HSPA5 / ST14 pair shown in @sec-literature each pass all four filters.
+
+---
+
+## Genes Unique to BMS Data
+
+Some BMS signals have **no published precedent**—these are potentially novel targets.
+
+::: {.query-box}
+Show genes consistently upregulated in high producers in BMS Study 1 that are NOT mentioned in any ingested publication.
+:::
+
+These novel signals may be CHO-cell-line-specific or molecule-specific effects not yet studied in the field.
+
+---
+
+## Mapping BMS Data to Public Omics
+
+The KG includes 13 public omics datasets from external CHO studies. You can check whether a BMS-identified gene is also differentially expressed in independent public datasets.
+
+::: {.query-box}
+Is HSPA5 differentially expressed in any of the public high-vs-low producer omics datasets?
+:::
+
+::: {.query-box}
+Which genes from the BMS Study 1 triple-overlap shortlist are also DE in at least 3 public CHO datasets?
+:::

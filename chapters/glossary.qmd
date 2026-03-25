@@ -1,0 +1,95 @@
+---
+title: "Glossary"
+---
+
+## Key Terms
+
+**adj. p-value (adjusted p-value)**
+: P-value corrected for multiple testing using the Benjamini-Hochberg (BH) method. Values below 0.05 are considered statistically significant in this KG.
+
+**C144**
+: One of the two BMS antibody molecules for which in-house multi-omics data is available in Study 1.
+
+**CHO (Chinese Hamster Ovary)**
+: The cell line used for biopharmaceutical protein production. All BMS in-house data in this KG comes from CHO cells.
+
+**Cohort**
+: A pairwise comparison group used for differential expression analysis (e.g., Nivo high vs. low producers, or clone A day 5 vs. clone B day 9). The KG contains 883 cohorts.
+
+**DAA (Differential Abundance Analysis)**
+: Statistical analysis identifying proteins or metabolites that differ significantly in abundance between two conditions. Method: T-test with time as covariate.
+
+**DEG (Differentially Expressed Gene)**
+: A gene whose mRNA expression differs significantly between two conditions. Method: DESeq2 with time as covariate.
+
+**DTE (Difficult-to-Express)**
+: Proteins with complex folding or disulfide-bond requirements that make them hard to produce at high levels in CHO cells.
+
+**Factor (MOFA Factor)**
+: A latent variable identified by MOFA that captures coordinated variation across multiple omics layers. Factor 1 is the most strongly correlated with productivity phenotypes (qP +0.848, IVCD +0.860, titre +0.904).
+
+**GEM (Genome-scale Metabolic Model)**
+: A constraint-based computational model of all metabolic reactions in a cell. Used for in-silico gene perturbation to predict effects on secretion flux. *GEM integration is in progress.*
+
+**GO (Gene Ontology)**
+: A standardised vocabulary of biological terms. Sub-ontologies: BP (Biological Process), MF (Molecular Function), CC (Cellular Component).
+
+**GS (Gene Significance)**
+: In WGCNA, the Pearson correlation between a gene's expression and a trait. Stored as `gs_qp`, `gs_ivcd`, and `gs_titre`.
+
+**GSEA (Gene Set Enrichment Analysis)**
+: Enrichment method that uses a ranked gene list to detect coordinated shifts in pathway activity. Reports Normalised Enrichment Score (NES).
+
+**IVCD (Integral Viable Cell Density)**
+: The area under the viable cell density–time curve. Measures cumulative biomass produced during a culture run.
+
+**KEGG (Kyoto Encyclopedia of Genes and Genomes)**
+: A database of biological pathways, reactions, enzymes, and compounds. Used for pathway enrichment and metabolic network traversal in this KG.
+
+**kME (Module Eigengene Connectivity)**
+: In WGCNA, the correlation between a gene's expression and its module eigengene. Higher kME (closer to 1) indicates the gene is a better representative (hub gene) of the module.
+
+**KO (Knockout)**
+: Complete elimination of a gene's function, typically via CRISPR-Cas9. Contrast with KD (knockdown, partial reduction) and OE (overexpression).
+
+**ME (Module Eigengene)**
+: The first principal component of all features within a WGCNA module. Represents the overall expression pattern of the module across samples.
+
+**MOFA (Multi-Omics Factor Analysis)**
+: An unsupervised dimensionality-reduction framework that integrates multiple omics layers into shared latent factors.
+
+**Nivo (Nivolumab)**
+: One of the two BMS antibody molecules (anti-PD-1 mAb) for which in-house data is available in Studies 1 and 2.
+
+**NES (Normalised Enrichment Score)**
+: The GSEA enrichment score normalised for gene set size and the number of permutations. Positive NES = enrichment in the first group; negative NES = enrichment in the second group.
+
+**NLQ (Natural Language Query)**
+: A plain-English question typed into the KG interface, which is automatically converted to a Cypher graph query.
+
+**OE (Overexpression)**
+: Engineering a cell to produce more of a specific protein, typically via stable transgene insertion.
+
+**ORA (Over-Representation Analysis)**
+: Enrichment method that tests whether a binary gene list contains more pathway members than expected by chance.
+
+**qP (Specific Productivity)**
+: The rate of product secretion per cell per unit time (pg/cell/day). A key productivity phenotype in the KG.
+
+**Titre**
+: Total product concentration in the culture supernatant at harvest (mg/L). Reflects both qP and viable cell density over time.
+
+**TF (Transcription Factor)**
+: A protein that binds DNA regulatory elements to activate or repress gene expression. TF enrichment identifies master regulators of DEG programs.
+
+**TOM (Topological Overlap Matrix)**
+: A measure of network interconnectedness used in WGCNA. Genes with high TOM are densely connected and tend to cluster into the same module.
+
+**TPM (Transcripts Per Million)**
+: A normalisation unit for RNA-seq expression data. Accounts for sequencing depth and transcript length.
+
+**UPR (Unfolded Protein Response)**
+: A cellular stress response activated when misfolded proteins accumulate in the ER. Associated with pro-productivity gene expression programs in high CHO producers.
+
+**WGCNA (Weighted Gene Co-expression Network Analysis)**
+: A network-based method that groups co-expressed genes, proteins, or metabolites into modules and correlates module activity with biological traits.

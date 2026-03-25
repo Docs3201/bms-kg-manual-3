@@ -1,0 +1,150 @@
+---
+title: "KG Utilities & Navigation"
+subtitle: "Searching, cross-referencing identifiers, filtering, and exporting"
+---
+
+## Overview {#sec-utilities}
+
+This chapter covers the practical mechanics of navigating the KG: searching by identifier, cross-referencing databases, filtering results, and exporting data.
+
+---
+
+## Searching by Identifier
+
+The KG supports search by multiple identifier types:
+
+| Entity | Supported identifiers |
+|---|---|
+| Gene | Gene symbol (e.g., `HSPA5`), NCBI Gene ID |
+| Protein | UniProt accession (e.g., `P11021`) |
+| Metabolite | ChEBI ID, metabolite name |
+| Pathway | KEGG pathway ID (e.g., `hsa04141`), GO term ID |
+
+::: {.query-box}
+Find gene HSPA5. Show its NCBI Gene ID, UniProt accession of its encoded protein, and all associated KEGG pathways.
+:::
+
+::: {.query-box}
+Search for metabolite lactate using its ChEBI ID CHEBI:16651.
+:::
+
+---
+
+## Cross-Referencing Identifiers
+
+::: {.query-box}
+What is the UniProt accession for the protein encoded by HSPA5?
+:::
+
+::: {.query-box}
+What CHO gene symbol corresponds to NCBI Gene ID 14828?
+:::
+
+::: {.query-box}
+What is the KEGG ortholog for human LDHA in CHO cells?
+:::
+
+---
+
+## Finding Orthologs
+
+The KG maps CHO genes to human and mouse orthologs via KEGG Orthologs (KO terms).
+
+::: {.query-box}
+Find the human ortholog of CHO gene LOC100760815.
+:::
+
+::: {.query-box}
+Which human genes are orthologs of the top 10 hub genes in WGCNA module M1?
+:::
+
+This is particularly useful when interpreting CHO findings in light of human biology or when searching for mechanistic context in human databases.
+
+---
+
+## Filtering Results
+
+### By Study
+
+::: {.query-box}
+Show DEG results for HSPA5 restricted to BMS internal studies only (exclude public omics data).
+:::
+
+::: {.query-box}
+Show only public omics datasets with DEG results for KCTD14.
+:::
+
+### By Molecule
+
+::: {.query-box}
+Filter WGCNA module enrichment results to Nivo only.
+:::
+
+::: {.query-box}
+Show MOFA Factor 1 weights for genes in the C144 dataset only.
+:::
+
+### By Statistical Threshold
+
+Recommended defaults:
+
+| Threshold | Value |
+|---|---|
+| DEG adj. p-value | < 0.05 |
+| DEG \|log2FC\| | > 2 |
+| Spearman correlation | \|r\| > 0.5 |
+| MOFA weight (top percentile) | > 80th percentile |
+| WGCNA module membership | kME > 0.5 |
+
+::: {.query-box}
+Show DEGs with adj. p-value < 0.01 and |log2FC| > 3 in the Nivo high vs. low cohort.
+:::
+
+---
+
+## Understanding Sample Coverage
+
+Not all omics layers are available for all samples:
+
+| Omics layer | Study 1 days | Study 2 days |
+|---|---|---|
+| Transcriptomics | 3, 5, 9, 11, 14 | — |
+| Proteomics | 3, 5, 9, 11, 14 | 5, 7, 9, 11 |
+| Metabolomics | 3, 5, 9, 11, 14 | — |
+
+::: {.query-box}
+Which samples in Study 1 have all three omics layers measured on the same day?
+:::
+
+---
+
+## Exporting Query Results
+
+Results can be exported as:
+
+- **CSV / TSV** — gene lists, ranked tables, enrichment results
+- **JSON** — for programmatic downstream processing
+- **Network formats** — for import into Cytoscape or other graph tools
+
+::: {.query-box}
+Export all WGCNA module M1 members with kME, gs_qp, and gs_titre as a CSV.
+:::
+
+::: {.query-box}
+Export the top 50 genes by positive MOFA Factor 1 weight across all three omics layers.
+:::
+
+---
+
+## Tips for Effective NLQ Queries
+
+1. **Be specific about the entity type** — "gene", "protein", "metabolite"
+2. **Name the cohort explicitly** — include molecule and study
+3. **State directionality** — "upregulated", "positively correlated", "with negative MOFA weight"
+4. **Include thresholds** — exact numbers rather than vague qualifiers ("strong", "significant")
+5. **Layer your filters progressively** — start broad, then add constraints
+6. **Reference specific modules or factors by name** — "WGCNA module M1", "MOFA Factor 1"
+
+::: {.callout-tip}
+If a query returns too many results, add a threshold filter. If it returns nothing, relax one constraint at a time (e.g., lower the cohort consistency requirement from 7/10 to 5/10).
+:::

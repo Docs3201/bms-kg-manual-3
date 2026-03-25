@@ -1,0 +1,138 @@
+---
+title: "Public Literature Evidence"
+subtitle: "What published studies say about genes, proteins, and productivity"
+---
+
+## Overview {#sec-literature}
+
+The KG integrates **cause-effect relationships** curated from ~500 publications on genetic perturbation in the context of CHO productivity. This chapter covers how to query that evidence layer.
+
+---
+
+## How Literature Evidence is Structured
+
+Publications were scouted from **~45,000 CHO-related papers** through a two-stage filter:
+
+1. **Filter 1** — grouped into three categories:
+   - **(A)** Gene/protein/metabolite target manipulation and cell engineering studies ✓ *included*
+   - **(B)** Bioprocess optimisation
+   - **(C)** Other studies
+
+2. **Filter 2** — Inclusion: productivity insights through target manipulation or omics-driven cell-line engineering. Exclusion: not directly relevant to target manipulation impacting productivity.
+
+Result: **~500 publications** describing genetic interventions (overexpression, knockdown, knockout) and their effects on productivity.
+
+Each extracted relationship is stored as a **directed edge** with properties:
+
+| Property | Description |
+|---|---|
+| `cause` | Gene / protein / metabolite manipulated |
+| `manipulation` | OE (overexpression), KD (knockdown), KO (knockout) |
+| `effect_entity` | Productivity phenotype affected |
+| `effect_direction` | Positive (+) or negative (−) |
+| `cell_line` | e.g., CHO-K1 GS KO |
+| `target_product` | e.g., IgG1 |
+| `reactor` | e.g., Fed-batch |
+| `pmid` | PubMed ID of source publication |
+| `evidence_sentence` | Source text from the paper |
+
+---
+
+## Key Effect Entities
+
+The KG tracks effects across four biological dimensions:
+
+**Productivity:** specific_productivity_qp · product_titer · volumetric_productivity · secretion_rate · product_yield · production_stability
+
+**Growth:** viable_cell_density_vcd · cell_viability · IVCD · specific_growth_rate · apoptosis_rate · cell_cycle_phase_distribution · cloning_efficiency
+
+**Metabolic:** lactate_production/consumption · ammonia_production · glucose_consumption · glutamine_metabolism · redox_balance · metabolic_flux · lipid_metabolism
+
+**Quality:** glycosylation_profile · fucosylation · sialylation · product_purity · protein_fragmentation · aggregation_level · host_cell_protein_content
+
+---
+
+## Querying Literature Evidence
+
+### Finding All Genes Linked to Productivity
+
+::: {.query-box}
+Which genes are linked to specific productivity (qP) in published CHO studies?
+:::
+
+::: {.query-box}
+Show all genes with published evidence for improving product titer in CHO cells.
+:::
+
+### Looking Up a Specific Gene
+
+::: {.query-box}
+What does the literature say about HSPA5 (GRP78/BiP) and CHO productivity?
+:::
+
+::: {.query-box}
+Summarise all published evidence for ST14 in CHO cells, including manipulation type and effect.
+:::
+
+### Filtering by Phenotype
+
+::: {.query-box}
+Which genes, when overexpressed, positively affect product titer in CHO?
+:::
+
+::: {.query-box}
+Show genes whose knockout reduces protein fragmentation.
+:::
+
+### Filtering by Source Organism
+
+::: {.query-box}
+Show only CHO-specific literature evidence for HSPA5.
+:::
+
+::: {.query-box}
+Are there human or mouse studies for FOXO1 that might be relevant to CHO productivity?
+:::
+
+### Retrieving Supporting Evidence Sentences
+
+::: {.query-box}
+Show the supporting sentences from publications linking HSPA5 overexpression to increased titre.
+:::
+
+### Genes with Experimental Manipulation
+
+::: {.query-box}
+Which genes have been experimentally overexpressed in CHO cells and shown a positive effect on qP? Show PMID and evidence.
+:::
+
+---
+
+## Worked Example: HSPA5 (GRP78/BiP)
+
+<span class="evidence-badge badge-lit">Literature</span>
+
+HSPA5 encodes the ER chaperone GRP78/BiP. Published manipulation studies support overexpression as a productivity lever:
+
+| PMID | Manipulation | Effect | Product |
+|---|---|---|---|
+| 32624757 | GRP78 OE | ↑ Titre | mAb |
+| 24081924 | BiP co-expression | ↑ qP | Recombinant protein |
+| 1373378 | GRP78 OE | ↑ Productivity | IgG |
+
+**Mechanism:** UPR activation expands ER folding capacity → improves secretory efficiency.
+
+---
+
+## Worked Example: ST14
+
+<span class="evidence-badge badge-lit">Literature</span>
+
+ST14 encodes Matriptase, a serine protease. Knockout studies show improved product quality:
+
+| PMID | Manipulation | Effect |
+|---|---|---|
+| 29777593 | ST14 KO | ↓ Protein fragmentation |
+| 29777593 | ST14 KO | ↑ Product purity |
+
+**Mechanism:** Matriptase degrades secreted product → knockout eliminates fragmentation and improves purity.

@@ -1,0 +1,127 @@
+---
+title: "Pathway & Functional Enrichment"
+subtitle: "KEGG, GO, GSEA, and ORA results stored in the KG"
+---
+
+## Overview {#sec-pathways}
+
+Pathway enrichment results are pre-computed and **stored directly in the KG** as edges between pathway nodes and cohort, network, or factor nodes. You do not need to run enrichment yourself—you query the results.
+
+---
+
+## Enrichment Methods
+
+| Method | Full name | Input | What it finds |
+|---|---|---|---|
+| **GSEA** | Gene Set Enrichment Analysis | Ranked gene list (by log2FC or MOFA weight) | Pathways with coordinated shifts across the full ranked list |
+| **ORA** | Over-Representation Analysis | Binary gene list (DEGs or module members) | Pathways with more hits than expected by chance |
+
+Both methods are applied to:
+
+- **DEG cohorts** (per molecule, per condition)
+- **WGCNA modules** (significant modules only)
+- **MOFA factors** (top 80th percentile features per factor per omics layer)
+
+Databases used: **KEGG Pathways**, **Gene Ontology Biological Process (GO:BP)**, **Gene Ontology Molecular Function (GO:MF)**, **Gene Ontology Cellular Component (GO:CC)**.
+
+---
+
+## Querying Pathway Enrichment
+
+### On DEG Cohorts
+
+::: {.query-box}
+Which KEGG pathways are enriched in high vs. low Nivo producers in Study 1?
+:::
+
+::: {.query-box}
+Show GO Biological Process terms enriched in the downregulated genes of C144 high vs. low producers.
+:::
+
+::: {.query-box}
+Filter enrichment results for the Nivo high-vs-low cohort to GSEA results only.
+:::
+
+### On WGCNA Modules
+
+::: {.query-box}
+What KEGG pathways are enriched in WGCNA gene module M1?
+:::
+
+::: {.query-box}
+Show GO terms enriched in the anti-productivity WGCNA gene module M18.
+:::
+
+### On MOFA Factors
+
+::: {.query-box}
+Which pathways are enriched in the top-weighted genes for MOFA Factor 1?
+:::
+
+::: {.query-box}
+Show pathway enrichment results for MOFA Factor 5, separated by positive and negative weight genes.
+:::
+
+---
+
+## Key Biological Themes
+
+Results from DEG, WGCNA, and MOFA all converge on consistent pathway themes:
+
+### Pro-Productivity Pathways
+
+| Pathway | Source | NES / Significance |
+|---|---|---|
+| Protein processing in endoplasmic reticulum | MOFA F1 GSEA | +3.3 ★★★ |
+| Cell adhesion molecules | MOFA F1 GSEA | +3.1 ★★★ |
+| Lysosome | MOFA F1 GSEA | +3.0 ★★★ |
+| Protein export | WGCNA M1 ORA | Significant |
+| Antigen processing and presentation | WGCNA M1 ORA | Significant |
+
+### Anti-Productivity Pathways
+
+| Pathway | Source | NES / Significance |
+|---|---|---|
+| Cell cycle | MOFA F1 GSEA | −3.2 ★★★ |
+| DNA replication | MOFA F1 GSEA | −3.0 ★★★ |
+| Homologous recombination | MOFA F1 GSEA | −2.9 ★★★ |
+| Fanconi anemia pathway | MOFA F1 GSEA | −2.7 ★★★ |
+| Mismatch repair | MOFA F1 GSEA | −2.6 ★★★ |
+
+::: {.callout-tip}
+**Biological interpretation:** High producers allocate resources to ER protein folding and secretion (UPR / secretory pathway upregulated) while suppressing cell proliferation programs (cell cycle / DNA replication downregulated). This is consistent with the canonical productivity vs. growth trade-off in CHO cells.
+:::
+
+---
+
+## Comparing Enriched Pathways Across Molecules
+
+::: {.query-box}
+Compare enriched KEGG pathways between Nivo and C144 high-vs-low producer cohorts. Which pathways are shared, and which are molecule-specific?
+:::
+
+---
+
+## KEGG Metabolic Network Traversal
+
+Beyond pathway enrichment, the KG stores the full KEGG metabolic network (enzymes, reactions, substrates, products), enabling mechanistic queries.
+
+::: {.query-box}
+Which KEGG pathway does gene LDHA belong to?
+:::
+
+::: {.query-box}
+What enzymatic activity does LDHA have, and which metabolic reactions does it catalyse?
+:::
+
+::: {.query-box}
+Find all genes in the glycolysis / gluconeogenesis KEGG pathway that are differentially expressed in high vs. low Nivo producers.
+:::
+
+::: {.query-box}
+Trace LDHA to its substrate and product: what metabolites are connected?
+:::
+
+::: {.query-box}
+Identify metabolic bottlenecks by combining DEG and KEGG data for the lactate metabolism pathway.
+:::

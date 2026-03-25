@@ -1,0 +1,35 @@
+{
+  "index.qmd": {
+    "index.html": "c6620640"
+  },
+  "chapters/01-orientation.qmd": {
+    "01-orientation.html": "d8431b90"
+  },
+  "chapters/02-internal-data.qmd": {
+    "02-internal-data.html": "04c97de6"
+  },
+  "chapters/03-public-literature.qmd": {
+    "03-public-literature.html": "25f93e8e"
+  },
+  "chapters/04-cross-evidence.qmd": {
+    "04-cross-evidence.html": "a5665573"
+  },
+  "chapters/05-pathway-enrichment.qmd": {
+    "05-pathway-enrichment.html": "c4df36b4"
+  },
+  "chapters/06-transcription-factors.qmd": {
+    "06-transcription-factors.html": "13efaa84"
+  },
+  "chapters/07-hypothesis-testing.qmd": {
+    "07-hypothesis-testing.html": "53fa5875"
+  },
+  "chapters/08-target-prioritization.qmd": {
+    "08-target-prioritization.html": "a56bd1f5"
+  },
+  "chapters/09-utilities.qmd": {
+    "09-utilities.html": "bad6caf9"
+  },
+  "chapters/glossary.qmd": {
+    "glossary.html": "0eba5bf2"
+  }
+}

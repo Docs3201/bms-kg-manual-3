@@ -1,0 +1,238 @@
+---
+title: "Internal Data Exploration"
+subtitle: "Browsing BMS omics data, differential expression, co-expression networks, and multi-omics integration"
+---
+
+## Overview {#sec-internal}
+
+This chapter covers everything you can learn from **BMS in-house data alone**. It is organised into four progressive layers of analysis, each building on the previous:
+
+```{=html}
+<div class="step-box"><div class="step-number">A</div><div><strong>Data browsing</strong> — what samples, clones, and molecules are available</div></div>
+<div class="step-box"><div class="step-number">B</div><div><strong>Differential Expression & Abundance</strong> — <span class="evidence-badge badge-deg">DEG/DAA</span> which features change between high and low producers</div></div>
+<div class="step-box"><div class="step-number">C</div><div><strong>Co-expression Networks (WGCNA)</strong> — <span class="evidence-badge badge-wgcna">WGCNA</span> which genes/proteins/metabolites move together</div></div>
+<div class="step-box"><div class="step-number">D</div><div><strong>Multi-Omics Integration (MOFA)</strong> — <span class="evidence-badge badge-mofa">MOFA</span> latent factors that explain productivity variation across all omics layers</div></div>
+```
+
+---
+
+## A · Data Browsing {#sec-browsing}
+
+### Samples, Clones, and Timepoints
+
+::: {.query-box}
+What samples are available for the Nivo molecule in Study 1?
+:::
+
+::: {.query-box}
+Which days have both transcriptomics and proteomics measurements in Study 1?
+:::
+
+The KG stores sample-level coverage. Study 1 has multi-omics samples at **Days 3, 5, 9, 11, and 14**. Study 2 proteomics spans **Days 5, 7, 9, and 11**.
+
+### Productivity Measurements Across Clones
+
+::: {.query-box}
+Show qP, titre, and IVCD values across all Nivo clones in Study 1.
+:::
+
+### Molecule-Level Filtering
+
+Use the molecule filter to restrict results to a single drug candidate:
+
+- `Nivo` — nivolumab (anti-PD-1 mAb)
+- `C144` — C144 antibody
+
+::: {.query-box}
+Show me differentially expressed genes for C144 high vs. low producers only.
+:::
+
+---
+
+## B · Differential Expression & Abundance {#sec-deg}
+
+### Method Reference
+
+| Omics Layer | Method | Covariate | Normalisation |
+|---|---|---|---|
+| Transcriptomics (DEG) | DESeq2 | Time | TPM |
+| Proteomics (DAA) | T-test | Time | Median central log₂ |
+| Metabolomics (DAA) | T-test | Time | Median central log₂ |
+
+Results are stored per **cohort** as directed edges from features to cohort nodes with properties `log2FC`, `adj_pvalue`, and `regulation` (upregulated / downregulated / non_regulated).
+
+### Finding Upregulated Genes in High Producers
+
+::: {.query-box}
+Which genes are upregulated in high vs. low Nivo producers in Study 1 with adj. p-value < 0.05 and |log2FC| > 2?
+:::
+
+### Cross-Cohort Consistency
+
+A gene is considered a **robust signal** if it is consistently differentially expressed across ≥ 7/10 high-vs-low cohorts. The shortlisting funnel applied to Study 1 data:
+
+| Filter step | Genes remaining |
+|---|---|
+| All DEGs across 232 cohorts | 11,481 |
+| adj. p-value < 0.05 & |log2FC| > 2 | 5,682 |
+| Directional consistency (RNA & protein both up or both down) | 775 |
+| Upregulated in high producers | 330 |
+| Concordant RNA–protein & Spearman r > 0.5 with qP | **63** |
+
+::: {.query-box}
+Show genes consistently upregulated in at least 7 out of 10 high vs. low producer cohorts in Study 1.
+:::
+
+### Comparing Across Cohorts
+
+::: {.query-box}
+Compare DEG results between the C144 and Nivo high-vs-low cohorts. Which genes are shared?
+:::
+
+### Protein and Metabolite Differential Abundance
+
+::: {.query-box}
+Which proteins are differentially abundant in high vs. low Nivo producers in Study 1?
+:::
+
+::: {.query-box}
+Show differentially abundant metabolites in the pellet fraction for high vs. low C144 producers.
+:::
+
+---
+
+## C · Co-expression Networks (WGCNA) {#sec-wgcna}
+
+### What is WGCNA?
+
+**Weighted Gene Co-expression Network Analysis (WGCNA)** clusters features that vary together across samples into **modules**. Each module is summarised by its **Module Eigengene (ME)**—the first principal component of all features in that module—which is then correlated with bioprocess traits (qP, titre, IVCD).
+
+```{=html}
+<div class="step-box"><div class="step-number">1</div><div><strong>Correlate</strong> — pairwise correlations across 36 samples × 3 omics layers</div></div>
+<div class="step-box"><div class="step-number">2</div><div><strong>Weight</strong> — raise correlations to soft-threshold power β (amplifies strong connections, suppresses noise; β=19 genes, β=6 protein, β=14 metabolites)</div></div>
+<div class="step-box"><div class="step-number">3</div><div><strong>Cluster</strong> — build Topological Overlap Matrix (TOM) → hierarchical clustering → 20 gene, 5 protein, 5 metabolite modules</div></div>
+<div class="step-box"><div class="step-number">4</div><div><strong>Summarise</strong> — reduce each module to its ME (1 value per sample)</div></div>
+<div class="step-box"><div class="step-number">5</div><div><strong>Correlate to traits</strong> — Pearson r of each ME vs. qP, titre, IVCD</div></div>
+```
+
+> **Published precedent:** Melville et al. (2011, *Journal of Biotechnology*) applied WGCNA to 295 microarrays from 121 CHO cultures and identified six transcriptional modules, five of which correlated with bioprocess variables including qP. The BMS KG replicates and extends this approach across all three omics layers.
+
+### Finding Productivity-Correlated Modules
+
+::: {.query-box}
+Which WGCNA gene modules are positively correlated with qP in Study 1?
+:::
+
+::: {.query-box}
+Show all WGCNA networks (gene, protein, and metabolite) with significant correlation to titre.
+:::
+
+Key modules identified:
+
+| Module | Omics | ME–qP correlation | Biological theme |
+|---|---|---|---|
+| M1 (Pro) | Gene | Positive | ER protein processing / UPR |
+| M18 (Anti) | Gene | Negative | Cell cycle / DNA replication |
+
+### Exploring Module Membership
+
+::: {.query-box}
+List all genes in WGCNA module M1 with their kME scores.
+:::
+
+### Hub Genes
+
+Hub genes have the highest **kME** (module eigengene connectivity) and are most representative of the module's biological program.
+
+::: {.query-box}
+What are the top 10 hub genes in WGCNA module M1?
+:::
+
+### Gene Significance Scores
+
+Gene significance (GS) scores quantify the correlation between each gene's expression and a phenotype. Available as `gs_qp`, `gs_ivcd`, and `gs_titre`.
+
+::: {.query-box}
+Show genes in module M1 with gs_qp > 0.5, ranked by descending kME.
+:::
+
+### WGCNA for Proteins and Metabolites
+
+The same WGCNA workflow was applied to proteomics and metabolomics data, yielding **5 protein modules** and **5 metabolite modules**.
+
+::: {.query-box}
+Which protein WGCNA modules correlate with IVCD in Study 1?
+:::
+
+::: {.query-box}
+Show metabolite module members with significant correlation to qP, ranked by gs_qp.
+:::
+
+---
+
+## D · Multi-Omics Factor Analysis (MOFA) {#sec-mofa}
+
+### What is MOFA?
+
+**Multi-Omics Factor Analysis (MOFA)** is an unsupervised dimensionality-reduction method that integrates transcriptomics, proteomics, and metabolomics simultaneously to uncover **latent factors**—hidden biological programs that explain variation across samples.
+
+```{=html}
+<div class="step-box"><div class="step-number">1</div><div><strong>Input preparation</strong> — Top 5,000 variable features (transcriptomics & proteomics), all 596 metabolite features</div></div>
+<div class="step-box"><div class="step-number">2</div><div><strong>MOFA decomposition</strong> — Joint matrix factorisation across 3 omics views; K=10 latent factors (sufficient to capture major sources without over-fragmenting biology)</div></div>
+<div class="step-box"><div class="step-number">3</div><div><strong>Factor–trait correlation</strong> — Spearman's ρ of each factor score vs. qP, titre, IVCD across 36 samples (Spearman is robust to outliers and non-linear monotonic relationships)</div></div>
+<div class="step-box"><div class="step-number">4</div><div><strong>Feature weight interpretation</strong> — top 80th percentile features per factor per omics layer extracted for pathway enrichment</div></div>
+```
+
+### Significant Factors and Their Biological Meaning
+
+| Factor | Correlation pattern | Interpretation |
+|---|---|---|
+| **Factor 1** | qP +0.848 · IVCD +0.860 · Titre +0.904 | Full-spectrum productivity signal — higher cell efficiency, volumetric yield, and cumulative biomass |
+| **Factor 2** | qP positive · IVCD negative | High-efficiency-per-cell phenotype — not driven by biomass accumulation |
+| **Factor 3** | Proteomics-only | Post-translational regulatory axis decoupled from transcription |
+| **Factor 4** | Transcriptomics-only | Transcriptional program not yet reflected in protein or metabolites at sampled time points |
+| **Factor 5** | Titre & qP strongly negative | Pure metabolic suppressor acting on secretory machinery |
+
+::: {.callout-important}
+**Factor 1** is the most actionable factor. Genes / proteins / metabolites with high positive Factor 1 weights are pro-productivity candidates; those with high negative weights are anti-productivity candidates.
+:::
+
+### Querying MOFA Results
+
+::: {.query-box}
+Which genes have the highest positive MOFA Factor 1 weights?
+:::
+
+::: {.query-box}
+Show proteins with MOFA Factor 1 weight above 0.3.
+:::
+
+::: {.query-box}
+Which metabolites contribute to Factor 5? What pathways are enriched?
+:::
+
+::: {.query-box}
+Show per-sample MOFA Factor 1 scores and overlay with qP measurements.
+:::
+
+### Cross-Omics Consistency: DEG × WGCNA × MOFA
+
+The overlap of all three evidence layers produces the highest-confidence candidates:
+
+- **Pro-productivity triple overlap**: 20 genes (upregulated in ≥7/10 cohorts AND in WGCNA M1 AND positive Factor 1 weight)
+- **Anti-productivity triple overlap**: 34 genes
+
+::: {.query-box}
+Show me genes that are consistently upregulated in high producers (≥7/10 cohorts), members of a pro-productivity WGCNA module, and have positive MOFA Factor 1 weight.
+:::
+
+Enriched pathways in the triple-overlap candidates:
+
+| Direction | Pathway | Significance |
+|---|---|---|
+| Pro-productivity | Protein processing in ER | ★★★ |
+| Pro-productivity | Cell adhesion molecules | ★★★ |
+| Pro-productivity | Lysosome | ★★★ |
+| Anti-productivity | Cell cycle | ★★★ |
+| Anti-productivity | DNA replication | ★★★ |
+| Anti-productivity | Homologous recombination | ★★★ |
