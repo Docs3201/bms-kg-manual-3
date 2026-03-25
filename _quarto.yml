@@ -6,7 +6,7 @@ project:
 book:
   title: "BMS CHO Cell Productivity Knowledge Graph"
 
-  author: "Elucidata × BMS"
+ 
   
   description: |
     A comprehensive guide to querying, interpreting, and deriving actionable
