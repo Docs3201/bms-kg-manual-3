@@ -2,7 +2,7 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Welcome",
+    "title": "BMS CHO Cell Productivity Knowledge Graph",
     "section": "",
     "text": "0.1 About this Manual\nThis manual is your end-to-end guide for working with the BMS CHO Cell Productivity Knowledge Graph (KG)—a multi-omics, multi-evidence platform built to accelerate the identification of genetic engineering targets that improve CHO cell productivity.\nThe KG integrates:\nThe bioinformatics analyses embedded in the KG include differential expression / abundance (DEG/DAA), WGCNA co-expression networks, MOFA multi-omics integration, pathway enrichment (GSEA & ORA), and transcription-factor enrichment.",
     "crumbs": [
@@ -12,7 +12,7 @@
   {
     "objectID": "index.html#about-this-manual",
     "href": "index.html#about-this-manual",
-    "title": "Welcome",
+    "title": "BMS CHO Cell Productivity Knowledge Graph",
     "section": "",
     "text": "BMS in-house data — transcriptomics, proteomics, and metabolomics from Study 1 and Study 2 alongside bioprocess readouts (qP, titre, IVCD, lactate, cell density)\nCHO-specific public omics data — 13 datasets from 10+ publications comparing high vs. low producers\nCausal literature evidence — cause-effect relationships curated from ~500 genetic perturbation publications\nExternal databases — NCBI, UniProt, GO, KEGG, ChEMBL, PubMed, Cellosaurus",
     "crumbs": [
@@ -22,7 +22,7 @@
   {
     "objectID": "index.html#how-to-use-this-manual",
     "href": "index.html#how-to-use-this-manual",
-    "title": "Welcome",
+    "title": "BMS CHO Cell Productivity Knowledge Graph",
     "section": "0.2 How to Use this Manual",
     "text": "0.2 How to Use this Manual\n\n\n\n\n\n\n\nIf you want to…\nGo to…\n\n\n\n\nUnderstand what the KG contains before querying\nSection 2.1\n\n\nBrowse internal BMS omics data and run DEG / WGCNA / MOFA queries\nSection 3.1\n\n\nLook up what published studies say about a gene\nSection 4.1\n\n\nCheck whether BMS data agrees with published findings\nSection 5.1\n\n\nExplore pathway enrichment results\nSection 6.1\n\n\nIdentify master regulators / transcription factors\nSection 7.1\n\n\nTest a specific biological hypothesis\nSection 8.1\n\n\nShortlist high-confidence engineering targets\nSection 9.1\n\n\nSearch, export, or understand data coverage\nSection 10.1",
     "crumbs": [
@@ -32,7 +32,7 @@
   {
     "objectID": "index.html#manual-structure",
     "href": "index.html#manual-structure",
-    "title": "Welcome",
+    "title": "BMS CHO Cell Productivity Knowledge Graph",
     "section": "0.3 Manual Structure",
     "text": "0.3 Manual Structure\nThis manual is organised into nine chapters covering all major use-cases, followed by a glossary of key terms.\n\n  1\n  Orientation — KG structure, data model, how to phrase queries\n\n\n  2\n  Internal Data Exploration — Browse samples, run DEG / WGCNA / MOFA analyses on BMS data\n\n\n  3\n  Public Literature Evidence — Search published gene-productivity associations\n\n\n  4\n  Cross-Evidence Integration — Concordance between BMS data and literature\n\n\n  5\n  Pathway & Functional Enrichment — KEGG, GO, ORA, GSEA\n\n\n  6\n  Transcription Factor Analysis — Master regulators of productivity\n\n\n  7\n  Hypothesis Testing — Interrogate the KG with a prior gene, pathway, or mechanism\n\n\n  8\n  Target Prioritisation — Shortlist overexpression and knockout candidates\n\n\n  9\n  KG Utilities & Navigation — Search, cross-reference, filter, export",
     "crumbs": [
@@ -42,7 +42,7 @@
   {
     "objectID": "index.html#key-conventions",
     "href": "index.html#key-conventions",
-    "title": "Welcome",
+    "title": "BMS CHO Cell Productivity Knowledge Graph",
     "section": "0.4 Key Conventions",
     "text": "0.4 Key Conventions\n\n\n\n\n\n\nNote\n\n\n\nQuery boxes throughout this manual show verbatim natural-language queries (NLQ) you can type directly into the KG interface. Results may vary slightly depending on your cohort or filter settings.\n\n\n\n\n\n\n\n\nTip\n\n\n\nEvidence badges tag information by analytical layer:\nDEG/DAA WGCNA MOFA Literature GEM (in progress)\n\n\n\nFor support, contact yogesh.lakhotia@elucidata.io",
     "crumbs": [
